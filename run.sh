@@ -1,6 +1,8 @@
 #!/bin/sh
-rm -f outputs/*.txt
-cd patternutils
+cd outputs
+rm -rf *
+mkdir simulator_outputs
+cd ../patternutils/
 python3 plot_Figure2.py --bitwidth=4
 python3 plot_Figure2.py --bitwidth=8
 python3 start.py
