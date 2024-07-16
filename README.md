@@ -1,8 +1,7 @@
 # Clone:
 git clone <https://github.com/pruhnuhv/bit-tree-sparse>
 
-# Setup:
-## Python Virtual Environment:
+# Setup Python Virtual Environment:
 pip3 install virtualenv\
 virtualenv zed_artifact\
 virtualenv -p /usr/bin/python3 zed_artifact\
