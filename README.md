@@ -1,3 +1,6 @@
+# Clone:
+git clone <https://github.com/pruhnuhv/bit-tree-sparse>
+
 # Setup:
 ## Python Virtual Environment:
 pip3 install virtualenv\
