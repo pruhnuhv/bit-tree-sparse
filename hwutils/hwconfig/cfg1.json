@@ -1,0 +1,17 @@
+{
+	"frequency"								: 500,
+	"dram_latency"            : 50,
+	"dram_bandwidth"          : 8,
+	"cache_latency"           : 1,
+	"cache_linesize"          : 8,
+	"cache_banks"							:	2,
+	"pe_count"                : 8,
+	"bit_width"               : 8,
+	"mult_lat"								: 1,
+	"add_lat"									: 1,
+	"str_tilesize"						: 16,
+	"strPII"									: 8,
+	"leaf_size"							  : 4,
+	"StaDissimilarity"				: 12,
+	"work_steal"							: 1
+}
