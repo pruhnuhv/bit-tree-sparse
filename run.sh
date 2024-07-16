@@ -1,5 +1,4 @@
 #!/bin/sh
-rm -rf outputs/*.txt
 cd patternutils
 python3 plot_Figure2.py --bitwidth=4
 python3 plot_Figure2.py --bitwidth=8
