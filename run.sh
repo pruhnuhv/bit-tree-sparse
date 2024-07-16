@@ -3,10 +3,11 @@ cd outputs
 rm -rf *
 mkdir simulator_outputs
 cd ../patternutils/
-python3 plot_Figure2.py --bitwidth=4
-python3 plot_Figure2.py --bitwidth=8
-python3 start.py
+# python3 plot_Figure2.py --bitwidth=4
+# python3 plot_Figure2.py --bitwidth=8
+# python3 start.py
 cd ../hwutils/
-python3 main.py
-python3 ratio.py > ../outputs/figure8_raw.txt
+# python3 main.py
+# python3 ratio.py > ../outputs/figure8_raw.txt
+cd ..
 cat outputs/figure8_raw.txt
