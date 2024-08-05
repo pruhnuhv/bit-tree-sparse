@@ -1,5 +1,7 @@
 import multiprocessing as mp
+from multiprocessing import get_context
 from pattern_utils import *
+
 def mem_access(row1, row2, nzperrow, cadd):
     score12 = 0
     score21 = 0
@@ -28,7 +30,8 @@ def pairwise_mem_access(matrix):
 #        rownz = count_zeroes_in_row(row)[1]
 #        nzperrow.append(rownz)
     nzperrow = [1 for i in range(len(matrix[0]))]    
-    with mp.Pool() as pool:
+    with get_context("fork").Pool(8) as pool:
+    # with mp.Pool() as pool:
         # Map the mem_access function to all (i,j) pairs in parallel
         results = pool.starmap(mem_access, [(matrix[i], matrix[j], nzperrow, 0) for i in range(n) for j in range(i+1, n)])
         
