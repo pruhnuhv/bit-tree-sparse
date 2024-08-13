@@ -12,37 +12,24 @@ def mem_access(row1, row2, nzperrow, cadd):
             score21 += 1 * nzperrow[cadd+i]
     return (score12, score21)
 
-#def pairwise_mem_access(matrix):
-#    access_patterns = {}
-#    for i in range(len(matrix)):
-#        for j in range(i+1, len(matrix)):
-#            scoreij, scoreji = mem_access(matrix[i], matrix[j])
-#            access_patterns[(i, j)] = scoreij
-#            access_patterns[(j, i)] = scoreji
-#
-#    return access_patterns
-
 def pairwise_mem_access(matrix):
     n = len(matrix)
     access_patterns = {}
     nzperrow = []
-#    for row in actmat:
-#        rownz = count_zeroes_in_row(row)[1]
-#        nzperrow.append(rownz)
     nzperrow = [1 for i in range(len(matrix[0]))]    
-    with get_context("fork").Pool(8) as pool:
-    # with mp.Pool() as pool:
-        # Map the mem_access function to all (i,j) pairs in parallel
-        results = pool.starmap(mem_access, [(matrix[i], matrix[j], nzperrow, 0) for i in range(n) for j in range(i+1, n)])
-        
-        # Store the results in the access_patterns dictionary
-        idx = 0
-        for i in range(n):
-            for j in range(i+1, n):
-                scoreij, scoreji = results[idx]
-                access_patterns[(i, j)] = scoreij
-                access_patterns[(j, i)] = scoreji
-                idx += 1
+    try:
+        with get_context("fork").Pool(8) as pool:
+        # with mp.Pool() as pool:
+            results = pool.starmap(mem_access, [(matrix[i], matrix[j], nzperrow, 0) for i in range(n) for j in range(i+1, n)])
+            idx = 0
+            for i in range(n):
+                for j in range(i+1, n):
+                    scoreij, scoreji = results[idx]
+                    access_patterns[(i, j)] = scoreij
+                    access_patterns[(j, i)] = scoreji
+                    idx += 1
+    except:
+        print("Failed to fork memory accessing")
     
     return access_patterns
 
@@ -53,7 +40,6 @@ def total_mem_access(matrix, actmat, cadd):
         rownz = count_zeroes_in_row(row)[1]
         nzperrow.append(rownz)
     
-    #total_score = count_zeroes_in_row(matrix[0])[1]*sum(nzperrow)
     for idx, element in enumerate(matrix[0]):
         if element:
             total_score += 1 * nzperrow[cadd+idx]

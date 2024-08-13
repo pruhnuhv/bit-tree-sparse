@@ -73,36 +73,41 @@ if __name__ == '__main__':
     av_diss_after  = []
     for (idx, matrix) in enumerate(weight_matrices):
         layer_memory_access1 = 0
-        
-        rows = len(matrix)
-        cols = len(matrix[0])
-        actrows = len(activation_matrices[idx])
-        actcols = len(activation_matrices[idx][0])
-        print(f"\n\n\n{idx+1}  Weight dimensions: {rows} x {cols}") 
-        print(f"Activation dimensions: {len(activation_matrices[idx])} x {len(activation_matrices[idx][0])}") 
-        #if (rows < cols):
-        #    matrix = transpose(matrix)
-        #    print("Matrix Transposed For Better Patterns!")
-        #rows = len(matrix)
-        #cols = len(matrix[0])
+        try: 
+            rows = len(matrix)
+            cols = len(matrix[0])
+            actrows = len(activation_matrices[idx])
+            actcols = len(activation_matrices[idx][0])
+            print(f"\n\n\n{idx+1}  Weight dimensions: {rows} x {cols}") 
+            print(f"Activation dimensions: {len(activation_matrices[idx])} x {len(activation_matrices[idx][0])}") 
+        except:
+            print("Incorrect Matrix Dimensions")
         
         '''Tile the matrix according to number of NZs per row'''
         t1 = time.time()
-        layer_memory_access1 = total_mem_access(matrix, activation_matrices[idx], 0)
-        nosubpatterns_matrix1 = reduce_subpatterns(matrix)
-        matchunks = chunkmat(nosubpatterns_matrix1, k)
+        
+        try: 
+            layer_memory_access1 = total_mem_access(matrix, activation_matrices[idx], 0)
+            nosubpatterns_matrix1 = reduce_subpatterns(matrix)
+            matchunks = chunkmat(nosubpatterns_matrix1, k)
+        except:
+            print("Failed to tile the input matrix")
+        
         t2 = time.time() 
         chunk_mem_access_bef_reorder = 0
         chunk_mem_access = 0
-        for cid, matc in enumerate(matchunks):
-            t3 = time.time() 
-            nosubpatterns_matc = reduce_subpatterns(matc)
-            orred_matc = or_op_mtx_k(nosubpatterns_matc, k)
-            chunk_mem_access_bef_reorder += total_mem_access(orred_matc, activation_matrices[idx], cid*k)
-            reordered_matc = pattern_reorder(orred_matc, activation_matrices[idx])
-            matc_mem_access = total_mem_access(reordered_matc, activation_matrices[idx], cid*k) 
-            chunk_mem_access += matc_mem_access
-            t4 = time.time() 
+        try:
+            for cid, matc in enumerate(matchunks):
+                t3 = time.time() 
+                nosubpatterns_matc = reduce_subpatterns(matc)
+                orred_matc = or_op_mtx_k(nosubpatterns_matc, k)
+                chunk_mem_access_bef_reorder += total_mem_access(orred_matc, activation_matrices[idx], cid*k)
+                reordered_matc = pattern_reorder(orred_matc, activation_matrices[idx])
+                matc_mem_access = total_mem_access(reordered_matc, activation_matrices[idx], cid*k) 
+                chunk_mem_access += matc_mem_access
+                t4 = time.time() 
+        except:
+            print("Failed to parse and reorder matrix chunks")
         
         t5 = time.time() 
         print(f"Un-optimized Memory Accesses for this layer = {layer_memory_access1}")
